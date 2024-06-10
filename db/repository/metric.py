@@ -19,7 +19,7 @@ def get_all_sensor_data(db: Session, sensor_type: str, skip: int = 0, limit: int
     return db.query(Metric).filter(Metric.sensor_type == sensor_type).offset(skip).limit(limit).all()
 
 
-def delete_all_metrics(db: Session, sensor_type: str):
+def delete_all_sensor_data(db: Session, sensor_type: str):
     try:
         db.query(Metric).filter(Metric.sensor_type == sensor_type).delete()
         db.execute(text("DELETE FROM ESP32Metrics;"))
