@@ -1,18 +1,30 @@
+from datetime import datetime
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from db.models.metric import Metric
 from db.schemas.metric import MetricCreate
 
 
-def get_sensor_data(db: Session, sensor_type: str, sensor_data_id: int):
-    return db.query(Metric).filter(Metric.sensor_type == sensor_type, Metric.id == sensor_data_id).first()
 
-def create_sensor_data(db: Session, sensor_type: str, sensor_data: MetricCreate):
-    db_sensor_data = Metric(sensor_type=sensor_type, value=sensor_data.value)
+
+def get_current_time():
+    return datetime.now()
+
+def create_sensor_data(metric: MetricCreate, db: Session):
+    current_time = get_current_time()
+    db_sensor_data = Metric(
+        record_time=current_time,
+        value=metric.value,
+        sensor_type=metric.sensor_type
+    )
     db.add(db_sensor_data)
     db.commit()
     db.refresh(db_sensor_data)
     return db_sensor_data
+
+
+def get_sensor_data(db: Session, sensor_type: str):
+    return db.query(Metric).filter(Metric.sensor_type == sensor_type).first()
 
 
 def get_all_sensor_data(db: Session, sensor_type: str, skip: int = 0, limit: int = 100):
