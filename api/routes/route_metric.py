@@ -10,8 +10,34 @@ from db.repository.metric import create_sensor_data, get_sensor_data, get_all_se
 
 router = APIRouter()
 
-# Sensor Temperatura ambiente
 
+@router.post("/metric/create-metric/", response_model=Metric)
+def create_sensor_metric(metric: MetricCreate, db: Session = Depends(get_db)):
+    return create_sensor_data(db=db, metric=metric)
+
+
+@router.get("/metrics/get-last-metric-from-sensor/{sensor_type}", response_model=Metric)
+def read_metric_from_sensor(sensor_type: str, db: Session = Depends(get_db)):
+    db_sensor_data = get_sensor_data(db=db, sensor_type=sensor_type)
+    if db_sensor_data is None:
+        raise HTTPException(status_code=404, detail="Temp_Amb not found")
+    return db_sensor_data
+
+
+@router.get("/metrics/get-metrics-from-sensor/{sensor_type}", response_model=list[Metric])
+def read_all_metrics_from_sensor(sensor_type: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    metrics = get_all_sensor_data(db, sensor_type=sensor_type, skip=skip, limit=limit)
+    return metrics
+
+
+@router.delete("/metrics/delete-metrics-from-sensor/{sensor_type}")
+def delete_all_metrics_from_sensor(sensor_type: str, db: Session = Depends(get_db)):
+    return delete_all_sensor_data(db=db, sensor_type=sensor_type)
+
+
+
+"""
+# Sensor Temperatura ambiente
 @router.post("/temp_amb/create", response_model=Metric)
 def create_temp_amb(sensor_data: MetricCreate, db: Session = Depends(get_db)):
     return create_sensor_data(db=db, sensor_type="temp_amb", sensor_data=sensor_data)
@@ -141,3 +167,5 @@ def read_lum(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 @router.delete("/lum")
 def delete_lum(db: Session = Depends(get_db)):
     return delete_all_sensor_data(db=db, sensor_type="lum")
+
+"""
