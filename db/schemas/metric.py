@@ -8,7 +8,6 @@ class MetricBase(BaseModel):
 
 
 class MetricCreate(MetricBase):
-    record_time: datetime
     pass
 
 class Metric(MetricBase):
