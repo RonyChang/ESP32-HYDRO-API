@@ -23,10 +23,6 @@ def read_metric_from_sensor(sensor_type: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Temp_Amb not found")
     return db_sensor_data
 
-def get_last_metric_from_sensor(db: Session, sensor_type: str):
-    sensor_metrics = db.query(Metric).filter(Metric.sensor_type == sensor_type).all()
-    last_metric = sensor_metrics[-1
-    return last_metric
 @router.get("/metrics/get-metrics-from-sensor/{sensor_type}", response_model=list[Metric])
 def read_all_metrics_from_sensor(sensor_type: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     metrics = get_all_sensor_data(db, sensor_type=sensor_type, skip=skip, limit=limit)
