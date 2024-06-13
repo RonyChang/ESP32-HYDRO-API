@@ -32,7 +32,7 @@ def get_all_sensor_data(db: Session, sensor_type: str, skip: int = 0, limit: int
     
 def get_last_metric_from_sensor(db: Session, sensor_type: str):
     sensor_metrics = db.query(Metric).filter(Metric.sensor_type == sensor_type).all()
-    last_metric = sensor_metrics[-1
+    last_metric = sensor_metrics[-1]
     return last_metric
 
 def delete_all_sensor_data(db: Session, sensor_type: str):
