@@ -35,6 +35,9 @@ def get_last_metric_from_sensor(db: Session, sensor_type: str):
     last_metric = sensor_metrics[-1]
     return last_metric
 
+def get_all_sensor_data_all(db: Session):
+    return db.query(Metric).all()
+
 def delete_all_sensor_data(db: Session, sensor_type: str):
     try:
         db.query(Metric).filter(Metric.sensor_type == sensor_type).delete()
