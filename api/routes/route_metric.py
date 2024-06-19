@@ -4,7 +4,7 @@ from fastapi import Depends
 from fastapi import HTTPException
 from db.session import get_db
 from db.schemas.metric import Metric, MetricCreate
-from db.repository.metric import create_sensor_data, get_sensor_data, get_all_sensor_data, get_all_sensor_data_all, get_last_metric_from_sensor, delete_all_sensor_data
+from db.repository.metric import create_sensor_data, get_sensor_data, get_all_sensor_data, get_all_sensor_data_all, get_last_metric_from_sensor, delete_all_sensor_data, delete_all_sensor_data_all
 
 #PH, TDS, TAGUA, HAMB, TAMB, TAGUA,INTENSIDAD LUMINICA(LUM)
 
@@ -40,6 +40,11 @@ def read_all_sensors(db: Session = Depends(get_db)):
 def delete_all_metrics_from_sensor(sensor_type: str, db: Session = Depends(get_db)):
     return delete_all_sensor_data(db=db, sensor_type=sensor_type)
 
+# Endpoint para borrar todos los datos de todos los sensores
+@router.delete("/delete-sensors/all")
+def delete_all_sensors(db: Session = Depends(get_db)):
+    delete_all_sensor_data_all(db=db)
+    return {"message": "All sensor data deleted successfully"}
 
 
 """

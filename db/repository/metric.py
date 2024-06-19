@@ -49,3 +49,7 @@ def delete_all_sensor_data(db: Session, sensor_type: str):
         return {"message": f"An error occurred: {str(e)}"}
     finally:
         db.close()
+
+def delete_all_sensor_data_all(db: Session):
+    db.query(Metric).delete()
+    db.commit()
