@@ -4,7 +4,7 @@ from fastapi import Depends
 from fastapi import HTTPException
 from db.session import get_db
 from db.schemas.metric import Metric, MetricCreate
-from db.repository.metric import create_sensor_data, get_sensor_data, get_all_sensor_data, get_all_sensor_data_all, get_last_metric_from_sensor, delete_all_sensor_data, delete_all_sensor_data_all
+from db.repository.metric import create_sensor_data, get_sensor_data, get_all_sensor_data, get_all_sensor_data_all, get_last_metric_from_all_sensors, get_last_metric_from_sensor, delete_all_sensor_data, delete_all_sensor_data_all
 
 #PH, TDS, TAGUA, HAMB, TAMB, TAGUA,INTENSIDAD LUMINICA(LUM)
 
