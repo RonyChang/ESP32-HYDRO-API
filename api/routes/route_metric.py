@@ -27,6 +27,14 @@ def read_metric_from_sensor(sensor_type: str, db: Session = Depends(get_db)):
 def read_all_metrics_from_sensor(sensor_type: str, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     metrics = get_all_sensor_data(db, sensor_type=sensor_type, skip=skip, limit=limit)
     return metrics
+    
+# Endpoint para obtener los últimos datos de todos los sensores
+@router.get("/sensors/last", response_model=list[Metric])
+def read_last_sensors_data(db: Session = Depends(get_db)):
+    last_sensors_data = get_last_metric_from_all_sensors(db=db)
+    if not last_sensors_data:
+        raise HTTPException(status_code=404, detail="No sensor data found")
+    return last_sensors_data
 
 # Endpoint para obtener todos los datos de todos los sensores
 @router.get("/sensors/all", response_model=list[Metric])
