@@ -35,6 +35,26 @@ def get_last_metric_from_sensor(db: Session, sensor_type: str):
     last_metric = sensor_metrics[-1]
     return last_metric
 
+def get_last_metric_from_all_sensors(db: Session):
+    subquery = (
+        db.query(
+            Metric.sensor_type,
+            db.func.max(Metric.record_time).label('latest_time')
+        )
+        .group_by(Metric.sensor_type)
+        .subquery()
+    )
+    query = (
+        db.query(Metric)
+        .join(
+            subquery,
+            (Metric.sensor_type == subquery.c.sensor_type) &
+            (Metric.record_time == subquery.c.latest_time)
+        )
+        .all()
+    )
+    return query
+    
 def get_all_sensor_data_all(db: Session):
     return db.query(Metric).all()
 
